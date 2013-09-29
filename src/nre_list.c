@@ -92,8 +92,24 @@ int nre_list_insert(ELEM e, PLIST list)
     PNODE pn;
 
     if((pn = malloc(sizeof(NODE))) == NULL) return -1;
-    pn->e = e; pn->nxt = list->focus->nxt;
+    pn->e = e;
+    pn->nxt = list->focus->nxt;
     list->focus->nxt = pn;
     return 0;
 }
 
+//-----------------------------------------------------------------------------
+// nre_list_delete:
+//-----------------------------------------------------------------------------
+
+int nre_list_delete(PLIST list)
+
+{
+    PNODE pn;
+
+    if(nre_list_empty(list)) return 1;
+    pn = list->focus->nxt;
+    list->focus->nxt = pn->nxt;
+    free(pn);
+    return 0;
+}
