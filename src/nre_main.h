@@ -32,15 +32,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <ncurses.h>
+#include "nre_debug.h"
 #include "nre_list.h"
-
-//-----------------------------------------------------------------------------
-// Defines:
-//-----------------------------------------------------------------------------
-
-#define MyDBG(x) do {printf("(%d) %s:%d\n", errno, __FILE__, __LINE__); goto x;} while (0)
+#include "nre_curses.h"
 
 //-----------------------------------------------------------------------------
 // End of include guard:

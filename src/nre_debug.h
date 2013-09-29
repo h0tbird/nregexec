@@ -20,57 +20,26 @@
 ******************************************************************************/
 
 //-----------------------------------------------------------------------------
+// Include guard:
+//-----------------------------------------------------------------------------
+
+#ifndef _NRE_DEBUG_
+#define _NRE_DEBUG_
+
+//-----------------------------------------------------------------------------
 // Includes:
 //-----------------------------------------------------------------------------
 
-#include "nre_main.h"
+#include <errno.h>
 
 //-----------------------------------------------------------------------------
-// load_data:
+// Defines:
 //-----------------------------------------------------------------------------
 
-int load_data (PLIST list) {
-
-    ELEM e;
-
-    while(1) {
-
-        e.line = NULL;
-        if(getline(&e.line, &e.size, stdin) < 0) break;
-        if(nre_list_insert(e, list) < 0) MyDBG(end0);
-    }
-
-    // Return on success:
-    return 0;
-
-    // Return on error:
-    end0: free(e.line);
-    return -1;
-}
+#define MyDBG(x) do {printf("(%d) %s:%d\n", errno, __FILE__, __LINE__); goto x;} while (0)
 
 //-----------------------------------------------------------------------------
-// Entry point:
+// End of include guard:
 //-----------------------------------------------------------------------------
 
-int main(void)
-
-{
-    // Variables:
-    PLIST list;
-
-    // Initialize list structure:
-    if((list = nre_list_new()) == NULL) MyDBG(end0);
-    if(load_data(list) < 0) MyDBG(end1);
-
-    // Ncurses:
-    if(init_ncurses() < 0) MyDBG(end1);
-    endwin();
-
-    // Return on success:
-    nre_list_destroy(list);
-    return 0;
-
-    // Return on error:
-    end1: nre_list_destroy(list);
-    end0: return -1;
-}
+#endif

@@ -2,8 +2,8 @@
 # all:
 #------------------------------------------------------------------------------
 
-all:		nre_main nre_list
-		gcc $(CFLAGS) nre_main.o nre_list.o $(LFLAGS) -o ../bin/nre
+all:		nre_main nre_list nre_curses
+		gcc $(CFLAGS) nre_main.o nre_list.o nre_curses.o $(LFLAGS) -o ../bin/nre
 		rm -f *.o
 
 #------------------------------------------------------------------------------
@@ -19,6 +19,13 @@ nre_main:	nre_main.o
 
 nre_list:	nre_list.o
 		gcc $(CFLAGS) -c nre_list.c
+
+#------------------------------------------------------------------------------
+# nre_curses:
+#------------------------------------------------------------------------------
+
+nre_curses:	nre_curses.o
+		gcc $(CFLAGS) -c nre_curses.c
 
 #------------------------------------------------------------------------------
 # clean:

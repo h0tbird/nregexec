@@ -23,54 +23,22 @@
 // Includes:
 //-----------------------------------------------------------------------------
 
-#include "nre_main.h"
+#include "nre_curses.h"
 
 //-----------------------------------------------------------------------------
-// load_data:
+// init_ncurses:
 //-----------------------------------------------------------------------------
 
-int load_data (PLIST list) {
+int init_ncurses(void) {
 
-    ELEM e;
-
-    while(1) {
-
-        e.line = NULL;
-        if(getline(&e.line, &e.size, stdin) < 0) break;
-        if(nre_list_insert(e, list) < 0) MyDBG(end0);
-    }
+    if(freopen("/dev/tty", "rw", stdin) == NULL) MyDBG(end0);
+    if(initscr() == NULL) MyDBG(end0);
+    if(raw() == ERR) MyDBG(end1);
 
     // Return on success:
     return 0;
 
     // Return on error:
-    end0: free(e.line);
-    return -1;
-}
-
-//-----------------------------------------------------------------------------
-// Entry point:
-//-----------------------------------------------------------------------------
-
-int main(void)
-
-{
-    // Variables:
-    PLIST list;
-
-    // Initialize list structure:
-    if((list = nre_list_new()) == NULL) MyDBG(end0);
-    if(load_data(list) < 0) MyDBG(end1);
-
-    // Ncurses:
-    if(init_ncurses() < 0) MyDBG(end1);
-    endwin();
-
-    // Return on success:
-    nre_list_destroy(list);
-    return 0;
-
-    // Return on error:
-    end1: nre_list_destroy(list);
+    end1: endwin();
     end0: return -1;
 }
