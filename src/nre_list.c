@@ -69,3 +69,15 @@ void nre_list_gostart(PLIST list)
 {
     list->focus = list->start;
 }
+
+//-----------------------------------------------------------------------------
+// nre_list_advance:
+//-----------------------------------------------------------------------------
+
+int nre_list_advance(PLIST list) {
+
+    if(nre_list_empty(list)) return 1;
+    if(nre_list_end(list)) return 1;
+    list->focus = list->focus->nxt;
+    return 0;
+}
