@@ -56,6 +56,7 @@ typedef struct _LIST {
 
 int nre_list_new(PLIST list);
 int nre_list_empty(PLIST list);
+int nre_list_end(PLIST list);
 void nre_list_gostart(PLIST list);
 int nre_list_advance(PLIST list);
 void nre_list_insert(PLIST list);
