@@ -26,6 +26,24 @@
 #include "nre_main.h"
 
 //-----------------------------------------------------------------------------
+// init_ncurses:
+//-----------------------------------------------------------------------------
+
+int init_ncurses(void) {
+
+    if(freopen("/dev/tty", "rw", stdin) == NULL) MyDBG(end0);
+    if(initscr() == NULL) MyDBG(end0);
+    if(raw() == ERR) MyDBG(end1);
+
+    // Return on success:
+    return 0;
+
+    // Return on error:
+    end1: endwin();
+    end0: return -1;
+}
+
+//-----------------------------------------------------------------------------
 // load_data:
 //-----------------------------------------------------------------------------
 
@@ -62,9 +80,9 @@ int main(void)
     if((list = nre_list_new()) == NULL) MyDBG(end0);
     if(load_data(list) < 0) MyDBG(end1);
 
-    // Test list:
-    nre_list_gostart(list);
-    do { printf("%s", list->focus->nxt->e.line); } while (nre_list_advance(list));
+    // Ncurses:
+    if(init_ncurses() < 0) MyDBG(end1);
+    endwin();
 
     // Return on success:
     nre_list_destroy(list);
