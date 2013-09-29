@@ -81,3 +81,19 @@ int nre_list_advance(PLIST list) {
     list->focus = list->focus->nxt;
     return 0;
 }
+
+//-----------------------------------------------------------------------------
+// nre_list_insert:
+//-----------------------------------------------------------------------------
+
+int nre_list_insert(ELEM e, PLIST list)
+
+{
+    PNODE pn;
+
+    if((pn = malloc(sizeof(NODE))) == NULL) return -1;
+    pn->e = e; pn->nxt = list->focus->nxt;
+    list->focus->nxt = pn;
+    return 0;
+}
+
