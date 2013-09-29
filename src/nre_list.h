@@ -36,8 +36,16 @@
 // Typedefs:
 //-----------------------------------------------------------------------------
 
+typedef struct _ELEM {
+
+    char *line;
+    int  mask;
+
+} ELEM, *PELEM;
+
 typedef struct _NODE {
 
+    ELEM         e;
     struct _NODE *pre;
     struct _NODE *nxt;
 
