@@ -16,3 +16,6 @@
 *.out
 *.app
 bin/
+
+# Vim temp files
+*.swp
