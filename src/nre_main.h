@@ -32,7 +32,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "nre_debug.h"
+#include "nre_common.h"
 #include "nre_list.h"
 #include "nre_curses.h"
 
