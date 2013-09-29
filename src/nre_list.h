@@ -31,6 +31,7 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
+#include <stdio.h>
 
 //-----------------------------------------------------------------------------
 // Typedefs:
@@ -62,12 +63,14 @@ typedef struct _LIST {
 // Prototypes:
 //-----------------------------------------------------------------------------
 
-int nre_list_new(PLIST list);
+PLIST nre_list_new(void);
 int nre_list_empty(PLIST list);
 int nre_list_end(PLIST list);
 void nre_list_gostart(PLIST list);
 int nre_list_advance(PLIST list);
 int nre_list_insert(ELEM e, PLIST list);
+int nre_list_delete(PLIST list);
+void nre_list_destroy(PLIST list);
 
 //-----------------------------------------------------------------------------
 // End of include guard:

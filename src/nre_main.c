@@ -51,11 +51,12 @@ int main(int argc, char *argv[])
 
 {
     // Variables:
-    LIST list;
+    PLIST list = nre_list_new();
 
     // Load data from stdin to list:
-    load_data(&list);
+    load_data(list);
 
     // Return:
+    nre_list_destroy(list);
     return 0;
 }

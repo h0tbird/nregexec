@@ -29,13 +29,16 @@
 // nre_list_new:
 //-----------------------------------------------------------------------------
 
-int nre_list_new(PLIST list)
+PLIST nre_list_new(void)
 
 {
-    if((list->start = malloc(sizeof(NODE))) == NULL) return -1;
-    list->focus = list->start;
-    list->focus->nxt = NULL;
-    return 0;
+    PLIST pl;
+
+    if((pl = malloc(sizeof(LIST))) == NULL) return NULL;
+    if((pl->start = malloc(sizeof(NODE))) == NULL) return NULL;
+    pl->focus = pl->start;
+    pl->focus->nxt = NULL;
+    return pl;
 }
 
 //-----------------------------------------------------------------------------
@@ -45,8 +48,8 @@ int nre_list_new(PLIST list)
 int nre_list_empty(PLIST list)
 
 {
-    if(list->start->nxt == NULL) return 0;
-    return 1;
+    if(list->start->nxt == NULL) return 1;
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -56,8 +59,8 @@ int nre_list_empty(PLIST list)
 int nre_list_end(PLIST list)
 
 {
-    if(list->focus->nxt->nxt == NULL) return 0;
-    return 1;
+    if(list->focus->nxt->nxt == NULL) return 1;
+    return 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -76,10 +79,10 @@ void nre_list_gostart(PLIST list)
 
 int nre_list_advance(PLIST list) {
 
-    if(nre_list_empty(list)) return 1;
-    if(nre_list_end(list)) return 1;
+    if(nre_list_empty(list)) return 0;
+    if(nre_list_end(list)) return 0;
     list->focus = list->focus->nxt;
-    return 0;
+    return 1;
 }
 
 //-----------------------------------------------------------------------------
@@ -95,7 +98,7 @@ int nre_list_insert(ELEM e, PLIST list)
     pn->e = e;
     pn->nxt = list->focus->nxt;
     list->focus->nxt = pn;
-    return 0;
+    return 1;
 }
 
 //-----------------------------------------------------------------------------
@@ -107,9 +110,22 @@ int nre_list_delete(PLIST list)
 {
     PNODE pn;
 
-    if(nre_list_empty(list)) return 1;
+    if(nre_list_empty(list)) return 0;
     pn = list->focus->nxt;
     list->focus->nxt = pn->nxt;
     free(pn);
-    return 0;
+    return 1;
+}
+
+//-----------------------------------------------------------------------------
+// nre_list_destroy:
+//-----------------------------------------------------------------------------
+
+void nre_list_destroy(PLIST list)
+
+{
+    nre_list_gostart(list);
+    while(nre_list_delete(list));
+    free(list->start);
+    free(list);
 }
