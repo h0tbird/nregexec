@@ -53,7 +53,7 @@ int load_data (PLIST list) {
 // Entry point:
 //-----------------------------------------------------------------------------
 
-int main(int argc, char *argv[])
+int main(void)
 
 {
     // Variables:
