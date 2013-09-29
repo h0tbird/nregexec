@@ -29,18 +29,24 @@
 // load_data:
 //-----------------------------------------------------------------------------
 
-void load_data (PLIST list) {
+int load_data (PLIST list) {
 
-    char *line = NULL;
-    size_t size;
+    ELEM e;
+
+    e.line = NULL;
+    e.mask = 0;
 
     while(1) {
 
-        if(getline(&line, &size, stdin) == -1) break;
-        printf("LOAD: %s", line);
+        if(getline(&e.line, &e.size, stdin) < 0) break;
+        if(nre_list_insert(e, list) < 0) MyDBG(end0);
     }
 
-    free(line);
+    // Return on success:
+    free(e.line); return 0;
+
+    // Return on error:
+    end0: free(e.line); return -1;
 }
 
 //-----------------------------------------------------------------------------
@@ -51,12 +57,17 @@ int main(int argc, char *argv[])
 
 {
     // Variables:
-    PLIST list = nre_list_new();
+    PLIST list;
 
-    // Load data from stdin to list:
-    load_data(list);
+    // Initialize list structure:
+    if((list = nre_list_new()) == NULL) MyDBG(end0);
+    if(load_data(list) < 0) MyDBG(end1);
 
-    // Return:
+    // Return on success:
     nre_list_destroy(list);
     return 0;
+
+    // Return on error:
+    end1: nre_list_destroy(list);
+    end0: return -1;
 }

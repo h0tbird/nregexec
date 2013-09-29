@@ -31,7 +31,6 @@
 //-----------------------------------------------------------------------------
 
 #include <stdlib.h>
-#include <stdio.h>
 
 //-----------------------------------------------------------------------------
 // Typedefs:
@@ -39,8 +38,9 @@
 
 typedef struct _ELEM {
 
-    char *line;
-    int  mask;
+    char   *line;
+    size_t size;
+    int    mask;
 
 } ELEM, *PELEM;
 
