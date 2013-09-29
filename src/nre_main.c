@@ -33,14 +33,11 @@ int load_data (PLIST list) {
 
     ELEM e;
 
-    e.line = NULL;
-    e.mask = 0;
-
     while(1) {
 
+        e.line = NULL;
         if(getline(&e.line, &e.size, stdin) < 0) break;
         if(nre_list_insert(e, list) < 0) MyDBG(end0);
-        e.line = NULL;
     }
 
     // Return on success:
