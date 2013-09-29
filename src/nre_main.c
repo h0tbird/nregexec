@@ -40,13 +40,15 @@ int load_data (PLIST list) {
 
         if(getline(&e.line, &e.size, stdin) < 0) break;
         if(nre_list_insert(e, list) < 0) MyDBG(end0);
+        e.line = NULL;
     }
 
     // Return on success:
-    free(e.line); return 0;
+    return 0;
 
     // Return on error:
-    end0: free(e.line); return -1;
+    end0: free(e.line);
+    return -1;
 }
 
 //-----------------------------------------------------------------------------
@@ -62,6 +64,10 @@ int main(void)
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
     if(load_data(list) < 0) MyDBG(end1);
+
+    // Test list:
+    nre_list_gostart(list);
+    do { printf("%s", list->focus->nxt->e.line); } while (nre_list_advance(list));
 
     // Return on success:
     nre_list_destroy(list);
