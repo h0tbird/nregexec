@@ -34,6 +34,7 @@ int init_ncurses(void) {
     if(freopen("/dev/tty", "rw", stdin) == NULL) MyDBG(end0);
     if(initscr() == NULL) MyDBG(end0);
     if(raw() == ERR) MyDBG(end1);
+    if(refresh() == ERR) MyDBG(end1);
 
     // Return on success:
     return 0;
@@ -41,4 +42,33 @@ int init_ncurses(void) {
     // Return on error:
     end1: endwin();
     end0: return -1;
+}
+
+//-----------------------------------------------------------------------------
+// create_newwin:
+//-----------------------------------------------------------------------------
+
+WINDOW *create_newwin(int height, int width, int starty, int startx) {
+
+    WINDOW *local_win;
+
+    if((local_win = newwin(height, width, starty, startx)) == NULL) MyDBG(end0);
+    box(local_win, 0 , 0); if(wrefresh(local_win) == ERR) MyDBG(end0);
+
+    // Return on success:
+    return local_win;
+
+    // Return on error:
+    end0: return NULL;
+}
+
+//-----------------------------------------------------------------------------
+// destroy_win:
+//-----------------------------------------------------------------------------
+
+void destroy_win(WINDOW *local_win) {
+
+    wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
+    wrefresh(local_win);
+    delwin(local_win);
 }

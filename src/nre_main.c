@@ -57,6 +57,7 @@ int main(void)
 {
     // Variables:
     PLIST list;
+    WINDOW *win_iput, *win_oput;
 
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
@@ -64,6 +65,12 @@ int main(void)
 
     // Ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
+    if((win_iput=create_newwin(3,70,(LINES - 3)/10,(COLS - 70)/2)) == NULL) MyDBG(end1);
+    if((win_oput=create_newwin(20,70,8,(COLS - 70)/2)) == NULL) MyDBG(end1);
+
+    getch();
+    destroy_win(win_iput);
+    destroy_win(win_oput);
     endwin();
 
     // Return on success:
