@@ -26,6 +26,14 @@
 #include "nre_list.h"
 
 //-----------------------------------------------------------------------------
-// :
+// nre_list_new:
 //-----------------------------------------------------------------------------
 
+int nre_list_new(PLIST list)
+
+{
+    if((list->start = malloc(sizeof(NODE))) == NULL) return -1;
+    list->focus = list->start;
+    list->focus->nxt = NULL;
+    return 0;
+}

@@ -29,7 +29,7 @@
 // load_data:
 //-----------------------------------------------------------------------------
 
-void load_data (void) {
+void load_data (PLIST list) {
 
     char *line = NULL;
     size_t size;
@@ -50,6 +50,12 @@ void load_data (void) {
 int main(int argc, char *argv[])
 
 {
-    load_data();
+    // Variables:
+    LIST list;
+
+    // Load data from stdin to list:
+    load_data(&list);
+
+    // Return:
     return 0;
 }

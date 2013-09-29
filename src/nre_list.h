@@ -30,6 +30,7 @@
 // Includes:
 //-----------------------------------------------------------------------------
 
+#include <stdlib.h>
 
 //-----------------------------------------------------------------------------
 // Typedefs:
@@ -53,7 +54,7 @@ typedef struct _LIST {
 // Prototypes:
 //-----------------------------------------------------------------------------
 
-void nre_list_new(PLIST list);
+int nre_list_new(PLIST list);
 int nre_list_empty(PLIST list);
 void nre_list_gostart(PLIST list);
 int nre_list_advance(PLIST list);
