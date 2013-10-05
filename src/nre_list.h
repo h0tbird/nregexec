@@ -39,8 +39,8 @@
 
 typedef struct _ELEM {
 
-    char   *line;
-    int    len, mask;
+    char *line;
+    int  len, mask;
 
 } ELEM, *PELEM;
 
