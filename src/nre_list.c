@@ -38,6 +38,7 @@ PLIST nre_list_new(void)
     if((pl->start = malloc(sizeof(NODE))) == NULL) return NULL;
     pl->focus = pl->start;
     pl->focus->nxt = NULL;
+    pl->count = 0;
     return pl;
 }
 
@@ -98,6 +99,7 @@ int nre_list_insert(ELEM e, PLIST list)
     pn->e = e;
     pn->nxt = list->focus->nxt;
     list->focus->nxt = pn;
+    list->count++;
     return 1;
 }
 
@@ -114,6 +116,7 @@ int nre_list_delete(PLIST list)
     pn = list->focus->nxt;
     list->focus->nxt = pn->nxt;
     free(pn);
+    list->count--;
     return 1;
 }
 
