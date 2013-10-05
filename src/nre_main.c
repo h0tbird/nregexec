@@ -67,8 +67,8 @@ int main(void)
 
     // Ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
-    if((win_iput=create_newwin(3,70,(LINES - 3)/10,(COLS - 70)/2)) == NULL) MyDBG(end1);
-    if((win_oput=create_newwin(20,70,8,(COLS - 70)/2)) == NULL) MyDBG(end1);
+    if((win_iput=create_newwin(3,COLS,0,0)) == NULL) MyDBG(end1);
+    if((win_oput=create_newwin(LINES-3,COLS,3,0)) == NULL) MyDBG(end1);
 
     getch();
     destroy_win(win_iput);
