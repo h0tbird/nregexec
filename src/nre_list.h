@@ -58,6 +58,7 @@ typedef struct _LIST {
    PNODE start;
    PNODE focus;
    int   count;
+   int   mxlen;
 
 } LIST, *PLIST;
 

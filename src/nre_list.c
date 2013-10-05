@@ -36,9 +36,9 @@ PLIST nre_list_new(void)
 
     if((pl = malloc(sizeof(LIST))) == NULL) return NULL;
     if((pl->start = malloc(sizeof(NODE))) == NULL) return NULL;
+    pl->count = pl->mxlen = 0;
     pl->focus = pl->start;
     pl->focus->nxt = NULL;
-    pl->count = 0;
     return pl;
 }
 
@@ -96,10 +96,9 @@ int nre_list_insert(ELEM e, PLIST list)
     PNODE pn;
 
     if((pn = malloc(sizeof(NODE))) == NULL) return -1;
-    pn->e = e;
-    pn->nxt = list->focus->nxt;
-    list->focus->nxt = pn;
-    list->count++;
+    if(list->mxlen < e.size) list->mxlen = e.size;
+    pn->e = e; pn->nxt = list->focus->nxt;
+    list->focus->nxt = pn; list->count++;
     return 1;
 }
 
