@@ -40,8 +40,7 @@
 typedef struct _ELEM {
 
     char   *line;
-    size_t size;
-    int    mask;
+    int    len, mask;
 
 } ELEM, *PELEM;
 

@@ -32,13 +32,12 @@
 int load_data (PLIST list) {
 
     ELEM e;
-    int i;
+    size_t i;
 
     while(1) {
 
-        e.line = NULL;
-        if(getline(&e.line, &e.size, stdin) < 0) break;
-        for(i=0; i<e.size; i++) if(e.line[i] == '\n') e.line[i] = '\0';
+        e.line = NULL; if(getline(&e.line, &i, stdin) < 0) break;
+        for(i=0, e.len=strlen(e.line); i<e.len; i++) if(e.line[i] == '\n') e.line[i] = '\0';
         if(nre_list_insert(e, list) < 0) MyDBG(end0);
     }
 
@@ -69,6 +68,10 @@ int main(void)
     if(init_ncurses() < 0) MyDBG(end1);
     if((win_iput=create_newwin(3,COLS,0,0)) == NULL) MyDBG(end1);
     if((win_oput=create_newwin(LINES-3,COLS,3,0)) == NULL) MyDBG(end1);
+
+    // Test list:
+    nre_list_gostart(list);
+    do { mvwprintw(win_oput, 1, 1, "%d ", list->mxlen); wrefresh(win_oput); } while (nre_list_advance(list));
 
     getch();
     destroy_win(win_iput);

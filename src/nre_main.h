@@ -32,6 +32,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "nre_common.h"
 #include "nre_list.h"
 #include "nre_curses.h"

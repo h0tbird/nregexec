@@ -96,7 +96,7 @@ int nre_list_insert(ELEM e, PLIST list)
     PNODE pn;
 
     if((pn = malloc(sizeof(NODE))) == NULL) return -1;
-    if(list->mxlen < e.size) list->mxlen = e.size;
+    if(list->mxlen < e.len) list->mxlen = e.len;
     pn->e = e; pn->nxt = list->focus->nxt;
     list->focus->nxt = pn; list->count++;
     return 1;
