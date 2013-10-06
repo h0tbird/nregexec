@@ -26,6 +26,36 @@
 #include "nre_main.h"
 
 //-----------------------------------------------------------------------------
+// pad2scr:
+//-----------------------------------------------------------------------------
+
+int pad2scr(WINDOW *p, PLIST l) {
+
+    int smincol = (COLS-l->mxlen)/2;
+    return prefresh(p,0,0,4,smincol,LINES-2,l->mxlen + smincol);
+}
+
+//-----------------------------------------------------------------------------
+// list2pad:
+//-----------------------------------------------------------------------------
+
+WINDOW* list2pad(PLIST l) {
+
+    WINDOW* p;
+    int i = 0;
+
+    if((p = newpad(l->count,l->mxlen)) == NULL) { MyDBG(end0); } nre_list_gostart(l);
+    do { mvwprintw(p, i, 0, "%s", l->focus->nxt->e.line); wrefresh(p); i++; }
+    while(nre_list_advance(l));
+
+    // Return on success:
+    return p;
+
+    // Return on error:
+    end0: return NULL;
+}
+
+//-----------------------------------------------------------------------------
 // load_data:
 //-----------------------------------------------------------------------------
 
@@ -58,24 +88,20 @@ int main(void)
 {
     // Variables:
     PLIST list;
-    WINDOW *win_iput, *win_oput;
+    WINDOW *iput, *pad;
 
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
     if(load_data(list) < 0) MyDBG(end1);
 
-    // Ncurses:
+    // Start ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
-    if((win_iput=create_newwin(3,COLS,0,0)) == NULL) MyDBG(end1);
-    if((win_oput=create_newwin(LINES-3,COLS,3,0)) == NULL) MyDBG(end1);
+    if((iput=create_newwin(3,COLS,0,0)) == NULL) MyDBG(end2);
+    if((pad = list2pad(list)) == NULL) MyDBG(end3);
+    if(pad2scr(pad, list) == ERR) MyDBG(end4);
 
-    // Test list:
-    nre_list_gostart(list);
-    do { mvwprintw(win_oput, 1, 1, "%d ", list->mxlen); wrefresh(win_oput); } while (nre_list_advance(list));
-
+    // End ncurses:
     getch();
-    destroy_win(win_iput);
-    destroy_win(win_oput);
     endwin();
 
     // Return on success:
@@ -83,6 +109,9 @@ int main(void)
     return 0;
 
     // Return on error:
+    end4: destroy_win(pad);
+    end3: destroy_win(iput);
+    end2: endwin();
     end1: nre_list_destroy(list);
     end0: return -1;
 }
