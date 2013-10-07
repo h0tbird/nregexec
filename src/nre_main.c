@@ -26,32 +26,28 @@
 #include "nre_main.h"
 
 //-----------------------------------------------------------------------------
-// pad2scr:
+// list2scr:
 //-----------------------------------------------------------------------------
 
-int pad2scr(WINDOW *p, PLIST l) {
-
-    int smincol = (COLS-l->mxlen)/2;
-    return prefresh(p,0,0,4,smincol,LINES-2,l->mxlen + smincol);
-}
-
-//-----------------------------------------------------------------------------
-// list2pad:
-//-----------------------------------------------------------------------------
-
-WINDOW* list2pad(PLIST l) {
+WINDOW* list2scr(PLIST l) {
 
     WINDOW* p;
     int i = 0;
+    int smincol = (COLS-l->mxlen)/2;
 
+    // Populate a new pad:
     if((p = newpad(l->count,l->mxlen)) == NULL) { MyDBG(end0); } nre_list_gostart(l);
-    do { mvwprintw(p, i, 0, "%s", l->focus->nxt->e.line); wrefresh(p); i++; }
+    do { mvwprintw(p, i, 0, "[x] %s", l->focus->nxt->e.line); wrefresh(p); i++; }
     while(nre_list_advance(l));
+
+    // Refresh:
+    if(prefresh(p,0,0,4,smincol,LINES-2,l->mxlen + smincol) == ERR) MyDBG(end1);
 
     // Return on success:
     return p;
 
     // Return on error:
+    end1: destroy_win(p);
     end0: return NULL;
 }
 
@@ -88,7 +84,8 @@ int main(void)
 {
     // Variables:
     PLIST list;
-    WINDOW *iput, *pad;
+    WINDOW *pad;
+    int key;
 
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
@@ -96,12 +93,14 @@ int main(void)
 
     // Start ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
-    if((iput=create_newwin(3,COLS,0,0)) == NULL) MyDBG(end2);
-    if((pad = list2pad(list)) == NULL) MyDBG(end3);
-    if(pad2scr(pad, list) == ERR) MyDBG(end4);
+
+    while((key = mvgetch(1,COLS/2)) != '\n') {
+
+        if((pad = list2scr(list)) == NULL) MyDBG(end2);
+        destroy_win(pad);
+    }
 
     // End ncurses:
-    getch();
     endwin();
 
     // Return on success:
@@ -109,8 +108,6 @@ int main(void)
     return 0;
 
     // Return on error:
-    end4: destroy_win(pad);
-    end3: destroy_win(iput);
     end2: endwin();
     end1: nre_list_destroy(list);
     end0: return -1;
