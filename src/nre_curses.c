@@ -34,6 +34,8 @@ int init_ncurses(void) {
     if(freopen("/dev/tty", "rw", stdin) == NULL) MyDBG(end0);
     if(initscr() == NULL) MyDBG(end0);
     if(raw() == ERR) MyDBG(end1);
+    if(noecho() == ERR) MyDBG(end1);
+    if(keypad(stdscr, TRUE) == ERR) MyDBG(end1);
     if(refresh() == ERR) MyDBG(end1);
 
     // Return on success:

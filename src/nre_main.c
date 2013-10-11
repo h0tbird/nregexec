@@ -26,6 +26,22 @@
 #include "nre_main.h"
 
 //-----------------------------------------------------------------------------
+// input:
+//-----------------------------------------------------------------------------
+
+int input(char *s) {
+
+    int c, len = strlen(s);
+
+    mvprintw(1, (COLS-len)/2, "%s", s);
+
+    if((c = getch()) == KEY_BACKSPACE ) {move(1,0); clrtoeol(); s[len-1] = '\0';}
+    else {s[len] = c; s[len+1] = '\0';}
+
+    return c;
+}
+
+//-----------------------------------------------------------------------------
 // list2scr:
 //-----------------------------------------------------------------------------
 
@@ -85,7 +101,8 @@ int main(void)
     // Variables:
     PLIST list;
     WINDOW *pad;
-    int key;
+    int key = 0;
+    char search[128];
 
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
@@ -94,7 +111,7 @@ int main(void)
     // Start ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
 
-    while((key = mvgetch(1,COLS/2)) != '\n') {
+    search[0] = '\0'; while((key = input(&search[0])) != '\n') {
 
         if((pad = list2scr(list)) == NULL) MyDBG(end2);
         destroy_win(pad);
