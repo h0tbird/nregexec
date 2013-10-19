@@ -32,8 +32,6 @@
 int input(char *s, int *p) {
 
     int c, i, l = strlen(s);
-
-    move(1,0); clrtoeol();
     mvprintw(1, (COLS-l)/2, "%s", s);
     move(1,((COLS+l)/2)-*p);
 
@@ -44,6 +42,7 @@ int input(char *s, int *p) {
         case KEY_RIGHT: if(*p != 0) (*p)--; break;
 
         case KEY_BACKSPACE:
+            move(1,0); clrtoeol();
             for(i=*p; i!=0 && i!=l; i--) s[l-1-i] = s[l-i];
             if(i!=l) s[l-1] = '\0';
             break;
