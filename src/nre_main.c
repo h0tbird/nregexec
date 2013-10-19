@@ -44,7 +44,7 @@ int input(char *s, int *p) {
         case KEY_RIGHT: if(*p != 0) {(*p)--;} break;
 
         case KEY_BACKSPACE:
-            for(c=*p; c!=0 && c!=l; c--) s[l-(1+*p)] = s[l-(*p)];
+            for(c=*p; c!=0 && c!=l; c--) s[l-1-c] = s[l-c];
             if(c!=l) s[l-1] = '\0';
             break;
 
