@@ -32,12 +32,16 @@
 int input(char *s, int *p) {
 
     int c, i, l = strlen(s);
+
+    // Print the current buffer (centered):
     mvprintw(1, (COLS-l)/2, "%s", s);
     move(1,((COLS+l)/2)-*p);
 
+    // Get one key (blocking):
     switch (c = getch())
 
     {
+        // Handle cursor movement:
         case KEY_LEFT:  if(*p != l) (*p)++; break;
         case KEY_RIGHT: if(*p != 0) (*p)--; break;
         case CTRL_A:    *p=l; break;
@@ -45,12 +49,14 @@ int input(char *s, int *p) {
         case KEY_DOWN:  break;
         case KEY_UP:    break;
 
+        // Handle deletion:
         case KEY_BACKSPACE:
             move(1,0); clrtoeol();
             for(i=*p; i!=0 && i!=l; i--) s[l-1-i] = s[l-i];
             if(i!=l) s[l-1] = '\0';
             break;
 
+        // Handle insertion:
         default:
             if(l==MAXLEN-1) break;
             for(i=0; i<=*p; i++) s[l-i+1] = s[l-i];
@@ -58,6 +64,7 @@ int input(char *s, int *p) {
             break;
     }
 
+    // Return the key code:
     return c;
 }
 
@@ -96,8 +103,8 @@ int load_data (PLIST list) {
     ELEM e;
     size_t i;
 
+    // Load from stdin, one line (without '\n') at a time:
     while(1) {
-
         e.line = NULL; if(getline(&e.line, &i, stdin) < 0) break;
         for(i=0, e.len=strlen(e.line); i<e.len; i++) if(e.line[i] == '\n') e.line[i] = '\0';
         if(nre_list_insert(e, list) < 0) MyDBG(end0);
@@ -131,8 +138,8 @@ int main(void)
     // Start ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
 
+    // Main loop:
     search[0] = '\0'; while((key = input(&search[0], &pos)) != '\n') {
-
         if((pad = list2scr(list)) == NULL) MyDBG(end2);
         destroy_win(pad);
     }
