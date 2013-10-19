@@ -40,6 +40,8 @@ int input(char *s, int *p) {
     {
         case KEY_LEFT:  if(*p != l) (*p)++; break;
         case KEY_RIGHT: if(*p != 0) (*p)--; break;
+        case KEY_DOWN:  break;
+        case KEY_UP:    break;
 
         case KEY_BACKSPACE:
             move(1,0); clrtoeol();
@@ -48,7 +50,7 @@ int input(char *s, int *p) {
             break;
 
         default:
-            if(l==63) break;
+            if(l==MAXLEN-1) break;
             for(i=0; i<=*p; i++) s[l-i+1] = s[l-i];
             s[l-*p] = c; s[l+1] = '\0';
             break;
@@ -118,7 +120,7 @@ int main(void)
     PLIST list;
     WINDOW *pad;
     int pos, key = pos = 0;
-    char search[64];
+    char search[MAXLEN];
 
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
