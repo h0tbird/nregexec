@@ -48,6 +48,7 @@ int input(char *s, int *p) {
             break;
 
         default:
+            if(l==63) break;
             for(i=0; i<=*p; i++) s[l-i+1] = s[l-i];
             s[l-*p] = c; s[l+1] = '\0';
             break;
@@ -117,7 +118,7 @@ int main(void)
     PLIST list;
     WINDOW *pad;
     int pos, key = pos = 0;
-    char search[128];
+    char search[64];
 
     // Initialize list structure:
     if((list = nre_list_new()) == NULL) MyDBG(end0);
