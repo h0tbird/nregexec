@@ -29,14 +29,27 @@
 // input:
 //-----------------------------------------------------------------------------
 
-int input(char *s) {
+int input(char *s, int *p) {
 
-    int c, len = strlen(s);
+    int c, l = strlen(s);
 
-    mvprintw(1, (COLS-len)/2, "%s", s);
+    move(1,0); clrtoeol();
+    mvprintw(1, (COLS-l)/2, "%s", s);
+    move(1,((COLS+l)/2)-*p);
 
-    if((c = getch()) == KEY_BACKSPACE ) {move(1,0); clrtoeol(); s[len-1] = '\0';}
-    else {s[len] = c; s[len+1] = '\0';}
+    switch (c = getch())
+
+    {
+        case KEY_LEFT:  if(*p != l) {(*p)++;} break;
+        case KEY_RIGHT: if(*p != 0) {(*p)--;} break;
+
+        case KEY_BACKSPACE:
+            for(c=*p; c!=0 && c!=l; c--) s[l-(1+*p)] = s[l-(*p)];
+            if(c!=l) s[l-1] = '\0';
+            break;
+
+        default: s[l] = c; s[l+1] = '\0'; break;
+    }
 
     return c;
 }
@@ -101,7 +114,7 @@ int main(void)
     // Variables:
     PLIST list;
     WINDOW *pad;
-    int key = 0;
+    int pos, key = pos = 0;
     char search[128];
 
     // Initialize list structure:
@@ -111,7 +124,7 @@ int main(void)
     // Start ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
 
-    search[0] = '\0'; while((key = input(&search[0])) != '\n') {
+    search[0] = '\0'; while((key = input(&search[0], &pos)) != '\n') {
 
         if((pad = list2scr(list)) == NULL) MyDBG(end2);
         destroy_win(pad);
