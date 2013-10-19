@@ -40,6 +40,8 @@ int input(char *s, int *p) {
     {
         case KEY_LEFT:  if(*p != l) (*p)++; break;
         case KEY_RIGHT: if(*p != 0) (*p)--; break;
+        case CTRL_A:    *p=l; break;
+        case CTRL_E:    *p=0; break;
         case KEY_DOWN:  break;
         case KEY_UP:    break;
 
