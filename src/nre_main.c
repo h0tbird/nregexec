@@ -95,7 +95,9 @@ WINDOW* list2scr(PLIST l) {
 }
 
 //-----------------------------------------------------------------------------
-// load_data:
+// load_data: This function reads from 'stdin' one line at a time. It removes
+//            any newline character before storing the string and its length
+//            into the dynamic list structure.
 //-----------------------------------------------------------------------------
 
 int load_data (PLIST list) {
@@ -103,10 +105,21 @@ int load_data (PLIST list) {
     ELEM e;
     size_t i;
 
-    // Load from stdin, one line (without '\n') at a time:
     while(1) {
-        e.line = NULL; if(getline(&e.line, &i, stdin) < 0) break;
-        for(i=0, e.len=strlen(e.line); i<e.len; i++) if(e.line[i] == '\n') e.line[i] = '\0';
+
+        // Load from 'stdin':
+        e.line = NULL;
+        if(getline(&e.line, &i, stdin) < 0) break;
+
+        // Find and replace '\n' newline character:
+        for(i=0, e.len=strlen(e.line); i<e.len; i++) {
+            if(e.line[i] == '\n') {
+                e.line[i] = '\0';
+                e.len-=1;
+            }
+        }
+
+        // Insert the new element into the list:
         if(nre_list_insert(e, list) < 0) MyDBG(end0);
     }
 
@@ -125,21 +138,21 @@ int load_data (PLIST list) {
 int main(void)
 
 {
-    // Variables:
-    PLIST list;
-    WINDOW *pad;
-    int pos, key = pos = 0;
-    char search[MAXLEN];
+    PLIST list;     // List of input strings and its metadata.
+    WINDOW *pad;    // Non-visible ncurses virtual screen.
+    int pos = 0;    // Cursor position on input 's' string.
+    int key = 0;    // Last key pressed on keyboard.
+    char s[MAXLEN]; // Current regex input string.
 
-    // Initialize list structure:
+    // Initialize and feed the list structure from 'stdin':
     if((list = nre_list_new()) == NULL) MyDBG(end0);
     if(load_data(list) < 0) MyDBG(end1);
 
-    // Start ncurses:
+    // Initialize ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
 
     // Main loop:
-    search[0] = '\0'; while((key = input(&search[0], &pos)) != '\n') {
+    s[0] = '\0'; while((key = input(&s[0], &pos)) != '\n') {
         if((pad = list2scr(list)) == NULL) MyDBG(end2);
         destroy_win(pad);
     }

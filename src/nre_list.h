@@ -39,8 +39,9 @@
 
 typedef struct _ELEM {
 
-    char *line;
-    int  len, mask;
+    char *line; // This is the raw line of text.
+    int  len;   // Total length of the raw line.
+    int  mask;  // Binary mask of metadata.
 
 } ELEM, *PELEM;
 
@@ -54,10 +55,10 @@ typedef struct _NODE {
 
 typedef struct _LIST {
 
-   PNODE start;
-   PNODE focus;
-   int   count;
-   int   mxlen;
+   PNODE start; // Pointer to the start of the list.
+   PNODE focus; // Pointer to the focused element of the list.
+   int   count; // Total number of elements in the list.
+   int   mxlen; // Length of the longest string on the list.
 
 } LIST, *PLIST;
 
