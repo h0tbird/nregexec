@@ -26,7 +26,9 @@
 #include "nre_main.h"
 
 //-----------------------------------------------------------------------------
-// input:
+// input: This function prints the interactive user input buffer in the center
+//        of the screen. It also moves the cursor to the 'p' position and
+//        handles cursor movementis as well as text insertion and deletion.
 //-----------------------------------------------------------------------------
 
 int input(char *s, int *p) {
@@ -151,8 +153,10 @@ int main(void)
     // Initialize ncurses:
     if(init_ncurses() < 0) MyDBG(end1);
 
-    // Main loop:
+    // Loop until enter is pressed:
     s[0] = '\0'; while((key = input(&s[0], &pos)) != '\n') {
+
+        // For every pressed key:
         if((pad = list2scr(list)) == NULL) MyDBG(end2);
         destroy_win(pad);
     }
