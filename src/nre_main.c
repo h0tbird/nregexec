@@ -40,9 +40,8 @@ int input(char *s, int *p) {
     move(1,((COLS+l)/2)-*p);
 
     // Get one key (blocking):
-    switch (c = getch())
+    switch (c = getch()) {
 
-    {
         // Handle cursor movement:
         case KEY_LEFT:  if(*p != l) (*p)++; break;
         case KEY_RIGHT: if(*p != 0) (*p)--; break;
@@ -71,7 +70,9 @@ int input(char *s, int *p) {
 }
 
 //-----------------------------------------------------------------------------
-// list2scr:
+// list2scr: This function creates one new pad, big enough to hold all the
+//           data in the list. It feeds the new pad with filtered information
+//           and displays a chunk of it in the screen.
 //-----------------------------------------------------------------------------
 
 WINDOW* list2scr(PLIST l) {
@@ -80,12 +81,14 @@ WINDOW* list2scr(PLIST l) {
     int i = 0;
     int smincol = (COLS-l->mxlen)/2;
 
-    // Populate a new pad:
+    // Create one pad as big as the list:
     if((p = newpad(l->count,l->mxlen)) == NULL) { MyDBG(end0); } nre_list_gostart(l);
+
+    // Poppulate the new pad:
     do { mvwprintw(p, i, 0, "[x] %s", l->focus->nxt->e.line); wrefresh(p); i++; }
     while(nre_list_advance(l));
 
-    // Refresh:
+    // Copy a chunk from the pad and display it on the screen:
     if(prefresh(p,0,0,4,smincol,LINES-2,l->mxlen + smincol) == ERR) MyDBG(end1);
 
     // Return on success:
